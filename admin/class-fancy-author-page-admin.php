@@ -100,4 +100,57 @@ class Fancy_Author_Page_Admin {
 
 	}
 
+	 /**
+	 * Show custom user profile fields
+	 * 
+	 * @param  object $profileuser A WP_User object
+	 * @return void
+	 */
+	public function custom_user_profile_fields($user){
+		
+		if(is_object($user)) {
+			$facebook = esc_attr( get_the_author_meta( 'facebook', $user->ID ) );
+			$twitter = esc_attr( get_the_author_meta( 'twitter', $user->ID ) );
+			$instagram = esc_attr( get_the_author_meta( 'instagram', $user->ID ) ); }
+		else {
+			$facebook = null;
+			$twitter = null;
+			$instagram = null;
+		}
+		?>
+		<h3>Extra profile information</h3>
+		<table class="form-table">
+			<tr>
+				<th><label for="facebook">Facebook</label></th>
+				<td>
+					<input type="text" class="regular-text" name="facebook" value="<?php echo $facebook; ?>" id="facebook" /><br />
+				</td>
+			</tr>
+			<tr>
+				<th><label for="twitter">Twitter</label></th>
+				<td>
+					<input type="text" class="regular-text" name="twitter" value="<?php echo $twitter; ?>" id="twitter" /><br />
+				</td>
+			</tr>
+			<tr>
+				<th><label for="instagram">Instagram</label></th>
+				<td>
+					<input type="text" class="regular-text" name="instagram" value="<?php echo $instagram; ?>" id="instagram" /><br />
+				</td>
+			</tr>
+		</table>
+		<?php
+	}
+
+	public function save_custom_user_profile_fields($user_id){
+		# again do this only if you can
+		if(!current_user_can('manage_options'))
+			return false;
+	 
+		# save my custom field
+		update_user_meta($user_id, 'facebook', $_POST['facebook']);
+		update_user_meta($user_id, 'twitter', $_POST['twitter']);
+		update_user_meta($user_id, 'instagram', $_POST['instagram']);
+	}
+
 }

@@ -100,4 +100,68 @@ class Fancy_Author_Page_Public {
 
 	}
 
+	/**
+	 * Register the shortcodes.
+	 *
+	 * @since    1.0.0
+	 */
+	public function register_shortcodes() {
+		add_shortcode( 'fancy-author', array( $this, 'fancy_author_page_shortcode') );
+	}
+
+	public function fancy_author_page_shortcode() {
+
+ 
+		$args = array( 'role'=> 'author' );
+
+		$authors = get_users( $args );
+	
+		foreach ($authors as $author) {
+
+			$all_meta_for_user = get_user_meta( $author->ID );
+
+			$author_page_url = get_author_posts_url( $author->ID, $author->nickname );
+
+			echo "<a href=\"$author_page_url\">";
+	
+			echo '<span class="user-name">' .  $author->display_name . '</span>';
+
+			echo '</a>';
+
+			echo '<span class="user-email">' . $author->user_email . '</span>';
+	
+			echo '<div class="social-media">';
+	
+			if ( isset($all_meta_for_user["facebook"][0]) ) {
+				echo '<span class="facebook">' . $all_meta_for_user["facebook"][0] . '</span>';
+			}
+
+			if ( isset($all_meta_for_user["twitter"][0]) ) {
+				echo '<span class="twitter">' . $all_meta_for_user["twitter"][0] . '</span>';
+			}
+
+			if ( isset($all_meta_for_user["instagram"][0]) ) {
+				echo '<span class="instagram">' . $all_meta_for_user["instagram"][0] . '</span>';
+			}
+			
+			echo '</div>';
+			
+		}
+	
+	}
+
+	function author_page( $template ) {
+
+		if ( is_author() ) {  
+			$new_template = plugin_dir_path( __DIR__ ) . 'page-template/authour-page-template.php';
+			if ( !empty( $new_template ) ) {
+				return $new_template;
+			}
+		}
+
+		return $template;
+	}
+
+
+
 }

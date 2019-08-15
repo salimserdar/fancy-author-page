@@ -157,6 +157,13 @@ class Fancy_Author_Page {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+		$this->loader->add_action( 'show_user_profile', $plugin_admin, 'custom_user_profile_fields', 10, 3 );
+		$this->loader->add_action( 'edit_user_profile', $plugin_admin, 'custom_user_profile_fields', 10, 3 );
+		$this->loader->add_action( 'user_new_form', $plugin_admin, 'custom_user_profile_fields', 10, 3 );
+
+		$this->loader->add_action( 'user_register', $plugin_admin, 'save_custom_user_profile_fields' );
+		$this->loader->add_action( 'profile_update', $plugin_admin, 'save_custom_user_profile_fields' );
+
 	}
 
 	/**
@@ -172,6 +179,10 @@ class Fancy_Author_Page {
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+
+		$this->loader->add_action( 'init', $plugin_public, 'register_shortcodes' );
+		$this->loader->add_filter( 'template_include', $plugin_public, 'author_page', 99 );
+
 
 	}
 
